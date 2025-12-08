@@ -127,18 +127,22 @@ class GSSLoader:
         """
         filepath = self.data_dir / filename
 
-        # Read Stata file
-        if columns:
-            df, _ = pyreadstat.read_dta(filepath, usecols=columns)
-        else:
+        # Use pandas for more robust Stata reading
+        try:
+            df = pd.read_stata(filepath, convert_categoricals=False)
+        except Exception:
+            # Fallback to pyreadstat
             df, _ = pyreadstat.read_dta(filepath)
-
-        # Convert to pandas DataFrame
-        df = pd.DataFrame(df)
+            df = pd.DataFrame(df)
 
         # Filter by year if specified
         if years and "year" in df.columns:
             df = df[df["year"].isin(years)]
+
+        # Filter columns if specified
+        if columns:
+            available = [c for c in columns if c in df.columns]
+            df = df[available]
 
         return df
 
