@@ -42,6 +42,68 @@ RACE_MAP: dict[int, str] = {
     3: "Other",
 }
 
+# GSS party identification
+PARTYID_MAP: dict[int, str] = {
+    0: "Strong Democrat",
+    1: "Not very strong Democrat",
+    2: "Independent, close to Democrat",
+    3: "Independent",
+    4: "Independent, close to Republican",
+    5: "Not very strong Republican",
+    6: "Strong Republican",
+    7: "Other party",
+}
+
+# GSS political views (ideology)
+POLVIEWS_MAP: dict[int, str] = {
+    1: "Extremely liberal",
+    2: "Liberal",
+    3: "Slightly liberal",
+    4: "Moderate",
+    5: "Slightly conservative",
+    6: "Conservative",
+    7: "Extremely conservative",
+}
+
+# GSS religion
+RELIG_MAP: dict[int, str] = {
+    1: "Protestant",
+    2: "Catholic",
+    3: "Jewish",
+    4: "None",
+    5: "Other",
+    6: "Buddhism",
+    7: "Hinduism",
+    8: "Other Eastern",
+    9: "Muslim/Islam",
+    10: "Orthodox Christian",
+    11: "Christian",
+    12: "Native American",
+    13: "Inter-nondenominational",
+}
+
+# GSS church attendance
+ATTEND_MAP: dict[int, str] = {
+    0: "Never",
+    1: "Less than once a year",
+    2: "Once a year",
+    3: "Several times a year",
+    4: "Once a month",
+    5: "2-3 times a month",
+    6: "Nearly every week",
+    7: "Every week",
+    8: "More than once a week",
+}
+
+# GSS marital status
+MARITAL_MAP: dict[int, str] = {
+    1: "Married",
+    2: "Widowed",
+    3: "Divorced",
+    4: "Separated",
+    5: "Never married",
+}
+
 # Common GSS opinion questions (Likert-style)
 OPINION_QUESTIONS: list[str] = [
     # Capital punishment

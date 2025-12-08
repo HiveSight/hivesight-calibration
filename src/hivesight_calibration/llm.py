@@ -10,10 +10,11 @@ from hivesight_calibration.persona import Persona
 
 # Pricing per 1M tokens (as of Dec 2024)
 MODEL_PRICING: dict[str, dict[str, float]] = {
+    "gpt-5-mini": {"input": 0.30, "output": 1.25},
+    "gpt-5": {"input": 3.00, "output": 12.50},
+    "gpt-5-nano": {"input": 0.10, "output": 0.40},
     "gpt-4o-mini": {"input": 0.15, "output": 0.60},
     "gpt-4o": {"input": 2.50, "output": 10.00},
-    "gpt-4-turbo": {"input": 10.00, "output": 30.00},
-    "gpt-3.5-turbo": {"input": 0.50, "output": 1.50},
 }
 
 
@@ -129,13 +130,20 @@ Please provide your response."""
         system_prompt = self.build_system_prompt(persona)
         question_prompt = self.build_question_prompt(question, response_type, scale)
 
+        # GPT-5 series uses max_completion_tokens, older models use max_tokens
+        token_param = (
+            "max_completion_tokens" if self.model.startswith("gpt-5") else "max_tokens"
+        )
+        # GPT-5 tends to be more verbose, so use higher limit
+        token_limit = 500 if self.model.startswith("gpt-5") else 200
+
         response = await self._client.chat.completions.create(
             model=self.model,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": question_prompt},
             ],
-            max_tokens=200,
+            **{token_param: token_limit},
             temperature=1.0,
         )
 

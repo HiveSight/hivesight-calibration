@@ -1,12 +1,22 @@
 """Persona generation from demographics."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from hivesight_calibration.data import DEGREE_MAP, RACE_MAP, REGION_MAP, SEX_MAP
+from hivesight_calibration.data import (
+    ATTEND_MAP,
+    DEGREE_MAP,
+    MARITAL_MAP,
+    PARTYID_MAP,
+    POLVIEWS_MAP,
+    RACE_MAP,
+    REGION_MAP,
+    RELIG_MAP,
+    SEX_MAP,
+)
 
 
 @dataclass
@@ -19,6 +29,12 @@ class Persona:
     sex: str
     race: str
     education: str
+    # Extended demographics (optional)
+    party: str | None = None
+    ideology: str | None = None
+    religion: str | None = None
+    attendance: str | None = None
+    marital: str | None = None
 
     def to_prompt(self) -> str:
         """Generate a natural language description for LLM prompts.
@@ -28,12 +44,34 @@ class Persona:
         """
         income_str = f"${self.income:,}"
 
-        return (
+        parts = [
             f"You are a {self.age}-year-old {self.sex.lower()} living in the {self.region} "
-            f"region of the United States. You identify as {self.race}. "
-            f"Your highest level of education is a {self.education.lower()}. "
-            f"Your household income is approximately {income_str} per year."
-        )
+            f"region of the United States.",
+            f"You identify as {self.race}.",
+            f"Your highest level of education is a {self.education.lower()}.",
+            f"Your household income is approximately {income_str} per year.",
+        ]
+
+        # Add political identity if available
+        if self.party:
+            parts.append(f"Politically, you identify as a {self.party}.")
+        if self.ideology:
+            parts.append(f"Your political views are {self.ideology.lower()}.")
+
+        # Add religion if available
+        if self.religion:
+            if self.religion == "None":
+                parts.append("You are not religious.")
+            else:
+                parts.append(f"Your religion is {self.religion}.")
+                if self.attendance:
+                    parts.append(f"You attend religious services {self.attendance.lower()}.")
+
+        # Add marital status if available
+        if self.marital:
+            parts.append(f"You are {self.marital.lower()}.")
+
+        return " ".join(parts)
 
     @classmethod
     def from_gss(cls, respondent: dict[str, Any]) -> "Persona":
@@ -52,6 +90,11 @@ class Persona:
             sex=SEX_MAP.get(respondent["sex"], "Unknown"),
             race=RACE_MAP.get(respondent["race"], "Unknown"),
             education=DEGREE_MAP.get(respondent["degree"], "Unknown"),
+            party=PARTYID_MAP.get(respondent.get("partyid")),
+            ideology=POLVIEWS_MAP.get(respondent.get("polviews")),
+            religion=RELIG_MAP.get(respondent.get("relig")),
+            attendance=ATTEND_MAP.get(respondent.get("attend")),
+            marital=MARITAL_MAP.get(respondent.get("marital")),
         )
 
 
