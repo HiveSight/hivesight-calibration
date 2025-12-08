@@ -1,0 +1,41 @@
+title: "HiveSight Calibration"
+author: Max Ghenis
+copyright: "2025"
+
+execute:
+  execute_notebooks: cache
+  timeout: 300
+
+repository:
+  url: https://github.com/HiveSight/hivesight-calibration
+  branch: main
+
+html:
+  use_repository_button: true
+  use_issues_button: true
+  use_edit_button: true
+  baseurl: https://hivesight.github.io/hivesight-calibration
+
+launch_buttons:
+  notebook_interface: jupyterlab
+
+sphinx:
+  extra_extensions:
+    - sphinx_togglebutton
+    - sphinx_copybutton
+    - sphinxcontrib.bibtex
+  config:
+    bibtex_bibfiles:
+      - references.bib
+    html_theme_options:
+      repository_url: https://github.com/HiveSight/hivesight-calibration
+      use_repository_button: true
+
+parse:
+  myst_enable_extensions:
+    - colon_fence
+    - deflist
+    - dollarmath
+    - linkify
+    - substitution
+    - tasklist

@@ -1,0 +1,11 @@
+format: jb-book
+root: intro
+chapters:
+  - file: background
+  - file: methodology
+  - file: notebooks/01_data_exploration
+  - file: notebooks/02_baseline_calibration
+  - file: notebooks/03_model_comparison
+  - file: results
+  - file: conclusion
+  - file: references
