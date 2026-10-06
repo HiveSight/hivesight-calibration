@@ -57,7 +57,7 @@ async def main():
     QUESTION_ID = "cappun"
     QUESTION_TEXT = "Do you favor or oppose the death penalty for persons convicted of murder?"
     RESPONSE_SCALE = ["Favor", "Oppose"]
-    MODEL = "gpt-5-mini"  # Using GPT-5 series per user preference
+    MODEL = "gpt-5"  # Using full GPT-5 model
 
     print(f"=== Enhanced Baseline Calibration Experiment ===")
     print(f"Question: {QUESTION_TEXT}")
